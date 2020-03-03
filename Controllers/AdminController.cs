@@ -20,16 +20,27 @@ namespace IndyBooks.Controllers
         [HttpGet]
         public IActionResult CreateBook()
         {
+            var bookVM = new AddBookViewModel();
+            bookVM.Writers = _db.Writers;
             //TODO: Populate a new AddBookViewModel object with a complete set of Writers
             //      and send it on to the View "AddBook"
-
-            return View();
+         
+            return View("AddBook", bookVM);
         }
         [HttpPost]
         public IActionResult CreateBook(AddBookViewModel bookVM)
         {
             //TODO: Build the Writer object using the parameter
-            Writer author;
+            Writer author = new Writer(); 
+            if (bookVM.AuthorId <= 0)
+            {
+                
+                    author.Name= bookVM.Name;
+            }
+            else
+            {
+
+            }
             
 
             //TODO: Build the Book using the parameter data and your newly created author.
@@ -47,12 +58,20 @@ namespace IndyBooks.Controllers
         [HttpGet]
         public IActionResult Index(long id)
         {
-            IQueryable<Book> books = _db.Books;
+            IQueryable<Book> books = _db.Books.Include(b => b.Author);//.Where(b => b.Id == id).OrderBy(b => b.SKU);*/
+            if(id > 0)
+            {
+                return View("SearchResults", books.Where(b => b.Id == id));
+            }
+            else
+            {
+                                return View("SearchResults", books.OrderBy(b => b.SKU));
+            }
             //TODO: filter books by the id (if passed an id as its Route Parameter),
             //     otherwise use the entire collection of Books, ordered by SKU.
 
 
-            return View("SearchResults", books);
+
         }
         /***
          * UPDATE
