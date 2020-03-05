@@ -14,9 +14,6 @@ namespace IndyBooks.Controllers
         private IndyBooksDataContext _db;
         public AdminController(IndyBooksDataContext db) { _db = db; }
 
-        /***
-         * CREATE
-         */
         [HttpGet]
         public IActionResult CreateBook()
         {
@@ -27,6 +24,7 @@ namespace IndyBooks.Controllers
          
             return View("AddBook", bookVM);
         }
+
         [HttpPost]
         public IActionResult CreateBook(AddBookViewModel bookVM)
         {
@@ -52,9 +50,7 @@ namespace IndyBooks.Controllers
             //Shows the book using the Index View 
             return RedirectToAction("Index", new { id = bookVM.Id });
         }
-        /***
-         * READ       
-         */
+
         [HttpGet]
         public IActionResult Index(long id)
         {
@@ -73,16 +69,12 @@ namespace IndyBooks.Controllers
 
 
         }
-        /***
-         * UPDATE
-         */
+
          //TODO: Write a method to take a book id, and load book and author info
          //      into the ViewModel for the AddBook View
          [HttpGet]
 
-        /***
-         * DELETE
-         */
+
         [HttpGet]
         public IActionResult DeleteBook(long id)
         {
@@ -97,10 +89,10 @@ namespace IndyBooks.Controllers
         [HttpPost]
         public IActionResult Search(SearchViewModel search)
         {
-            //Full Collection Search
-            IQueryable<Book> foundBooks = _db.Books; // start with entire collection
 
-            //Partial Title Search
+            IQueryable<Book> foundBooks = _db.Books; 
+
+
             if (search.Title != null)
             {
                 foundBooks = foundBooks
@@ -109,16 +101,16 @@ namespace IndyBooks.Controllers
                             ;
             }
 
-            //Author's Last Name Search
+
             if (search.AuthorName != null)
             {
-                //Use the Name property of the Book's Author entity
+
                 foundBooks = foundBooks
                             .Include(b => b.Author)
                             .Where(b => b.Author.Name.Contains(search.AuthorName, StringComparison.CurrentCulture))
                             ;
             }
-            //Priced Between Search (min and max price entered)
+
             if (search.MinPrice > 0 && search.MaxPrice > 0)
             {
                 foundBooks = foundBooks
@@ -126,7 +118,7 @@ namespace IndyBooks.Controllers
                             .OrderByDescending(b=>b.Price)
                             ;
             }
-            //Highest Priced Book Search (only max price entered)
+
             if (search.MinPrice == 0 && search.MaxPrice > 0)
             {
                 decimal max = _db.Books.Max(b => b.Price);
@@ -134,7 +126,7 @@ namespace IndyBooks.Controllers
                             .Where(b => b.Price == max)
                             ;
             }
-            //Composite Search Results
+
             return View("SearchResults", foundBooks);
         }
 

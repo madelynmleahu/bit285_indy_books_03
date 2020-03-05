@@ -10,8 +10,6 @@ namespace IndyBooks.Models
         public string SKU { get; set; }
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
-
-        //Navigtion Property according to ERD Diagram
         public Writer Author { get; set; }
 
     }

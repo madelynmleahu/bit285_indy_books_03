@@ -9,7 +9,6 @@ namespace IndyBooks.Models
         public long Id { get; set; }
         [Display(Name = "Author Name")]
         public String Name { get; set; }
-        //Nav Property
         public ICollection<Book> Books { get; set; }
     }
 }
