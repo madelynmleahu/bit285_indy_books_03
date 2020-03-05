@@ -42,7 +42,7 @@ namespace IndyBooks.Controllers
             
 
             //TODO: Build the Book using the parameter data and your newly created author.
-            Book book; 
+            Book book; //finish this
 
             //TODO: Add author and book to their DbSets; SaveChanges
            
